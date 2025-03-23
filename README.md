@@ -8,8 +8,10 @@ You can have a local uv or docker-interpeter based setup. The repository is also
 configured to seamlessly working within a GitHub Codespace. See the instructions
 for the various setup scenarios below.
 
-Independently of how the setup was done, the virtual environment can be activated with
-`source .venv/bin/activate` (after creating it with uv) and the various tasks like formatting, testing, and documentation building
+Independently of how the setup was done, the virtual environment can be 
+created with `uv venv` and
+activated with
+`source .venv/bin/activate` and the various tasks like formatting, testing, and documentation building
 can be executed using `poe`. For example, `poe format` will format the code, including the 
 notebooks. Just run `poe` to see the available commands.
 
@@ -49,5 +51,6 @@ The fastest way to get started is to use a GitHub Codespace. Just click on the
 button in the repository's main page.
 
 ## Contributing
+
 Please open new issues for bugs, feature requests and extensions. See more details about the structure and
 workflow in the [contributing page](docs/04_contributing/04_contributing.rst).

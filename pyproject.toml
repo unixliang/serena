@@ -35,7 +35,8 @@ dev = [
   "docutils>=0.20.1",
   "jinja2",
   "jupyter>=1.0.0",
-  "jupyter-book>=1.0.0",
+  # In version 1.0.4 we get a NoneType error related to some config conversion (yml_analytics is None and should be a list)
+  "jupyter-book==1.0.0",
   "mypy>=1.4.1",
   "nbqa>=1.7.1",
   "nbstripout>=0.6.1",
