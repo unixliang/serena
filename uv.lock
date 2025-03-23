@@ -1665,6 +1665,19 @@ wheels = [
 ]
 
 [[package]]
+name = "pyright"
+version = "1.1.397"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "nodeenv" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/92/23/cefa10c9cb198e0858ed0b9233371d62bca880337f628e58f50dfdfb12f0/pyright-1.1.397.tar.gz", hash = "sha256:07530fd65a449e4b0b28dceef14be0d8e0995a7a5b1bb2f3f897c3e548451ce3", size = 3818998 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/01/b5/98ec41e1e0ad5576ecd42c90ec363560f7b389a441722ea3c7207682dec7/pyright-1.1.397-py3-none-any.whl", hash = "sha256:2e93fba776e714a82b085d68f8345b01f91ba43e1ab9d513e79b70fc85906257", size = 5693631 },
+]
+
+[[package]]
 name = "pytest"
 version = "8.3.5"
 source = { registry = "https://pypi.org/simple" }
@@ -1693,18 +1706,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pytest-lazy-fixtures"
-version = "1.1.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pytest" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/11/b9/81537997a5f887f8b9a379df0925ca53d7718bcbb7d1c754bd9699499ec4/pytest_lazy_fixtures-1.1.2.tar.gz", hash = "sha256:14ba4154dab52066c1c4d6547cc40bbf60726445cb16f1d2dcc9485cdf38964d", size = 7231 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/f8/c8/280dac9595059c3703f6c0aff7bfd7f0c6b39cdafd437bf3c37047193d6a/pytest_lazy_fixtures-1.1.2-py3-none-any.whl", hash = "sha256:e04c164d2caa5a6b9c846fa7559aad2ce0980a944daf4b75579f39920ae961e4", size = 7012 },
-]
-
-[[package]]
 name = "python-dateutil"
 version = "2.9.0.post0"
 source = { registry = "https://pypi.org/simple" }
@@ -1714,6 +1715,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/66/c0/0c8b6ad9f17a802ee498c46e004a0eb49bc148f2fd230864601a86dcf6db/python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3", size = 342432 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427", size = 229892 },
+]
+
+[[package]]
+name = "python-dotenv"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/bc/57/e84d88dfe0aec03b7a2d4327012c1627ab5f03652216c63d49846d7a6c58/python-dotenv-1.0.1.tar.gz", hash = "sha256:e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca", size = 39115 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6a/3e/b68c118422ec867fa7ab88444e1274aa40681c606d59ac27de5a5588f082/python_dotenv-1.0.1-py3-none-any.whl", hash = "sha256:f7b63ef50f1b690dddf550d03497b66d609393b40b564ed0d674909a68ebf16a", size = 19863 },
 ]
 
 [[package]]
@@ -1936,8 +1946,12 @@ name = "serena"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "overrides" },
     { name = "pandas" },
     { name = "plotly" },
+    { name = "pyright" },
+    { name = "python-dotenv" },
+    { name = "requests" },
 ]
 
 [package.optional-dependencies]
@@ -1954,7 +1968,6 @@ dev = [
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-cov" },
-    { name = "pytest-lazy-fixtures" },
     { name = "ruff" },
     { name = "sphinx" },
     { name = "sphinx-book-theme" },
@@ -1965,10 +1978,6 @@ dev = [
     { name = "sphinx-toolbox" },
     { name = "sphinxcontrib-bibtex" },
     { name = "sphinxcontrib-spelling" },
-]
-
-[package.dev-dependencies]
-dev = [
     { name = "toml-sort" },
 ]
 
@@ -1982,13 +1991,16 @@ requires-dist = [
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.4.1" },
     { name = "nbqa", marker = "extra == 'dev'", specifier = ">=1.7.1" },
     { name = "nbstripout", marker = "extra == 'dev'", specifier = ">=0.6.1" },
+    { name = "overrides", specifier = ">=7.7.0,<8" },
     { name = "pandas", specifier = ">=2.2.1" },
     { name = "plotly", specifier = ">=5.19.0" },
     { name = "poethepoet", marker = "extra == 'dev'", specifier = ">=0.20.0" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.3.3" },
+    { name = "pyright", specifier = ">=1.1.396,<2" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0.2" },
     { name = "pytest-cov", marker = "extra == 'dev'" },
-    { name = "pytest-lazy-fixtures", marker = "extra == 'dev'", specifier = ">=1.0.5" },
+    { name = "python-dotenv", specifier = ">=1.0.0,<2" },
+    { name = "requests", specifier = ">=2.32.3,<3" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.0.285" },
     { name = "sphinx", marker = "extra == 'dev'", specifier = ">=7" },
     { name = "sphinx-book-theme", marker = "extra == 'dev'", specifier = ">=1.0.1" },
@@ -1999,11 +2011,9 @@ requires-dist = [
     { name = "sphinx-toolbox", marker = "extra == 'dev'", specifier = ">=3.5.0" },
     { name = "sphinxcontrib-bibtex", marker = "extra == 'dev'" },
     { name = "sphinxcontrib-spelling", marker = "extra == 'dev'", specifier = ">=8.0.0" },
+    { name = "toml-sort", marker = "extra == 'dev'", specifier = ">=0.24.2" },
 ]
 provides-extras = ["dev"]
-
-[package.metadata.requires-dev]
-dev = [{ name = "toml-sort", specifier = ">=0.24.2" }]
 
 [[package]]
 name = "setuptools"
