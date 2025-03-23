@@ -130,7 +130,7 @@ doc-build = [
   "doc-spellcheck",
   "_sphinx_build"
 ]
-_mypy = "mypy src"
+_mypy = "mypy src/serena"
 _mypy_nb = "nbqa mypy docs"
 type-check = [
   "_mypy",
