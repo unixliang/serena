@@ -1,6 +1,7 @@
 name: Linting, Types and Docs Check
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:  # Manual trigger only - workflow disabled from auto-running
 
 jobs:
   check:
@@ -11,10 +12,6 @@ jobs:
       actions: write
       contents: read
     steps:
-      - name: Cancel previous run
-        uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ github.token }}
       - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -40,8 +37,6 @@ jobs:
         run: uv run poe type-check
       - name: Docs
         run: uv run poe doc-build
-      
-      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
