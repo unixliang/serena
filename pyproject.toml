@@ -23,7 +23,9 @@ dependencies = [
   "requests>=2.32.3,<3",
   "pyright>=1.1.396,<2",
   "overrides>=7.7.0,<8",
-  "python-dotenv>=1.0.0, <2"
+  "python-dotenv>=1.0.0, <2",
+  "mcp>=1.5.0",
+  "fastmcp>=0.4.1",
 ]
 
 [project.license]
@@ -226,7 +228,8 @@ ignore = [
   "F403",
   "F405",
   "C401",
-  "C901"
+  "C901",
+  "ASYNC230",
 ]
 unfixable = [
   "F841",

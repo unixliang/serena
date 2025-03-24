@@ -1,0 +1,4 @@
+# absolute path to the project
+project_root: /path/to/project
+# language of the project (csharp, python, rust, java, typescript, javascript, go, or ruby)
+language: python
