@@ -19,8 +19,8 @@ from sensai.util import logging
 from multilspy import SyncLanguageServer
 from multilspy.multilspy_config import Language, MultilspyConfig
 from multilspy.multilspy_logger import MultilspyLogger
-from serena.file_utils import scan_directory
 from serena.llm.prompt_factory import PromptFactory
+from serena.util.file_system import scan_directory
 
 log = logging.getLogger(__name__)
 
@@ -136,6 +136,26 @@ def read_file(ctx: Context, relative_path: str) -> str:
                 return self.langsrv.get_open_file_text(relative_path)
 
     return ReadFileTool(ctx).execute()
+
+
+@mcp.tool()
+def create_text_file(ctx: Context, relative_path: str, content: str) -> str:
+    """
+    :param ctx: the context object, which will be created and provided automatically
+    :param relative_path: the relative path to the file to create
+    :param content: the (utf-8-encoded) content to write to the file
+    :return: a message indicating success or failure
+    """
+    log.info(f"create_file: {relative_path=}")
+
+    class CreateFileTool(Tool):
+        def _execute(self):
+            absolute_path = os.path.join(self.project_root, relative_path)
+            with open(absolute_path, "w", encoding="utf-8") as f:
+                f.write(content)
+            return f"File created: {relative_path}"
+
+    return CreateFileTool(ctx).execute()
 
 
 @mcp.tool()
