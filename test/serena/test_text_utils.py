@@ -1,7 +1,7 @@
 import re
 
 import pytest
-from autobob.utils.text_utils import LineType, search_text
+from serena.text_utils import LineType, search_text
 
 
 class TestTextUtils:
