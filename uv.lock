@@ -2061,6 +2061,18 @@ wheels = [
 ]
 
 [[package]]
+name = "sensai-utils"
+version = "1.4.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e9/b1/9dba08e2d8ea739b58d1ac393c066169f1ca6506c86f0322d6e56e600ae2/sensai_utils-1.4.0.tar.gz", hash = "sha256:2d32bdcc91fd1428c5cae0181e98623142d2d5f7e115e23d585a842dd9dc59ba", size = 56317 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c6/df/49cc942b653427df0bbd3b9a2fb1e85652df3d4c1d9f6dcbfce1b6155716/sensai_utils-1.4.0-py3-none-any.whl", hash = "sha256:ed6fc57552620e43b33cf364ea0bc0fd7df39391069dd7b621b113ef55547507", size = 63214 },
+]
+
+[[package]]
 name = "serena"
 version = "0.1.0"
 source = { editable = "." }
@@ -2073,6 +2085,7 @@ dependencies = [
     { name = "pyright" },
     { name = "python-dotenv" },
     { name = "requests" },
+    { name = "sensai-utils" },
 ]
 
 [package.optional-dependencies]
@@ -2125,6 +2138,7 @@ requires-dist = [
     { name = "python-dotenv", specifier = ">=1.0.0,<2" },
     { name = "requests", specifier = ">=2.32.3,<3" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.0.285" },
+    { name = "sensai-utils", specifier = ">=1.4.0" },
     { name = "sphinx", marker = "extra == 'dev'", specifier = ">=7" },
     { name = "sphinx-book-theme", marker = "extra == 'dev'", specifier = ">=1.0.1" },
     { name = "sphinx-comments", marker = "extra == 'dev'", specifier = ">=0.0.3" },

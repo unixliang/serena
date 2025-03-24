@@ -26,6 +26,7 @@ dependencies = [
   "python-dotenv>=1.0.0, <2",
   "mcp>=1.5.0",
   "fastmcp>=0.4.1",
+  "sensai-utils>=1.4.0",
 ]
 
 [project.license]
@@ -230,6 +231,10 @@ ignore = [
   "C401",
   "C901",
   "ASYNC230",
+  "ISC003",
+  "B024",
+  "B007",
+  "SIM102",
 ]
 unfixable = [
   "F841",
