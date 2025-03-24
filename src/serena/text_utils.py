@@ -1,0 +1,188 @@
+import re
+from dataclasses import dataclass
+from enum import StrEnum
+
+
+class LineType(StrEnum):
+    """Enum for different types of lines in search results."""
+
+    MATCH = "match"
+    """Part of the matched lines"""
+    BEFORE_MATCH = "prefix"
+    """Lines before the match"""
+    AFTER_MATCH = "postfix"
+    """Lines after the match"""
+
+
+@dataclass(kw_only=True)
+class TextLine:
+    """Represents a line of text with information on how it relates to the match."""
+
+    line_number: int
+    line_content: str
+    match_type: LineType
+    """Represents the type of line (match, prefix, postfix)"""
+
+    def get_display_prefix(self) -> str:
+        """Get the display prefix for this line based on the match type."""
+        if self.match_type == LineType.MATCH:
+            return "  >"
+        return "..."
+
+    def format_line(self) -> str:
+        """Format the line for display with line number and content."""
+        prefix = self.get_display_prefix()
+        line_num = str(self.line_number).rjust(4)
+        return f"{prefix}{line_num}: {self.line_content}"
+
+
+@dataclass(kw_only=True)
+class TextSearchMatch:
+    """Represents a match found in a text file or a string."""
+
+    context_lines: list[TextLine]
+    source_file_path: str | None = None
+    """Path to the file where the match was found."""
+
+    @property
+    def start_line(self) -> int:
+        return self.context_lines[0].line_number
+
+    @property
+    def end_line(self) -> int:
+        return self.context_lines[-1].line_number
+
+    @property
+    def num_matched_lines(self) -> int:
+        return len([line for line in self.context_lines if line.match_type == LineType.MATCH])
+
+    def to_display_string(self) -> str:
+        return "\n".join([line.format_line() for line in self.context_lines])
+
+
+def search_text(
+    pattern: str | re.Pattern[str],
+    content: str | None = None,
+    source_file_path: str | None = None,
+    allow_multiline_match: bool = False,
+    context_lines_before: int = 0,
+    context_lines_after: int = 0,
+    is_glob: bool = False,
+) -> list[TextSearchMatch]:
+    """
+    Search for a pattern in text content. Supports both regex and glob-like patterns.
+
+    Args:
+        pattern: Pattern to search for (regex or glob-like pattern)
+        content: The text content to search. May be None if source_file_path is provided.
+        source_file_path: Optional path to the source file. If content is None,
+            this has to be passed and the file will be read.
+        allow_multiline_match: Whether to search across multiple lines
+        context_lines_before: Number of context lines to include before matches
+        context_lines_after: Number of context lines to include after matches
+        is_glob: If True, pattern is treated as a glob-like pattern (e.g., "*.py", "test_??.py")
+                 and will be converted to regex internally
+
+    Returns:
+        List of TextSearchMatch objects
+
+    :raises: ValueError if the pattern is not valid
+
+    """
+    if source_file_path and not content:
+        with open(source_file_path) as f:
+            content = f.read()
+
+    if not content:
+        raise ValueError("Pass either content or source_file_path")
+
+    matches = []
+
+    # Convert pattern to a compiled regex if it's a string
+    if is_glob and isinstance(pattern, str):
+        # Convert glob pattern to regex
+        # Escape all regex special characters except * and ?
+        regex_special_chars = r"\^$.|+()[{"
+        escaped_pattern = ""
+        for char in pattern:
+            if char in regex_special_chars:
+                escaped_pattern += "\\" + char
+            elif char == "*":
+                escaped_pattern += ".*"
+            elif char == "?":
+                escaped_pattern += "."
+            else:
+                escaped_pattern += char
+        # For glob patterns, don't anchor with ^ and $ to allow partial line matches
+        compiled_pattern = re.compile(escaped_pattern)
+    elif isinstance(pattern, str):
+        try:
+            compiled_pattern = re.compile(pattern)
+        except re.error as e:
+            raise ValueError(f"Invalid regex pattern: {e}") from e
+    else:
+        # Pattern is already a compiled regex
+        compiled_pattern = pattern
+
+    # Split the content into lines for processing
+    lines = content.splitlines()
+    total_lines = len(lines)
+
+    if allow_multiline_match:
+        # For multiline matches, we need to use the DOTALL flag to make '.' match newlines
+        if isinstance(pattern, str):
+            # If we've compiled the pattern ourselves, we need to recompile with DOTALL
+            pattern_str = compiled_pattern.pattern
+            compiled_pattern = re.compile(pattern_str, re.DOTALL)
+        # Search across the entire content as a single string
+        for match in compiled_pattern.finditer(content):
+            start_pos = match.start()
+            end_pos = match.end()
+
+            # Find the line numbers for the start and end positions
+            start_line_num = content[:start_pos].count("\n") + 1
+            end_line_num = content[:end_pos].count("\n") + 1
+
+            # Calculate the range of lines to include in the context
+            context_start = max(1, start_line_num - context_lines_before)
+            context_end = min(total_lines, end_line_num + context_lines_after)
+
+            # Create TextLine objects for the context
+            context_lines = []
+            for i in range(context_start - 1, context_end):
+                line_num = i + 1
+                if context_start <= line_num < start_line_num:
+                    match_type = LineType.BEFORE_MATCH
+                elif end_line_num < line_num <= context_end:
+                    match_type = LineType.AFTER_MATCH
+                else:
+                    match_type = LineType.MATCH
+
+                context_lines.append(TextLine(line_number=line_num, line_content=lines[i], match_type=match_type))
+
+            matches.append(TextSearchMatch(context_lines=context_lines, source_file_path=source_file_path))
+    else:
+        # Search line by line
+        for i, line in enumerate(lines):
+            line_num = i + 1
+            if compiled_pattern.search(line):
+                # Calculate the range of lines to include in the context
+                context_start = max(0, i - context_lines_before)
+                context_end = min(total_lines - 1, i + context_lines_after)
+
+                # Create TextLine objects for the context
+                context_lines = []
+                for j in range(context_start, context_end + 1):
+                    context_line_num = j + 1
+                    if j < i:
+                        match_type = LineType.BEFORE_MATCH
+                    elif j > i:
+                        match_type = LineType.AFTER_MATCH
+                    else:
+                        match_type = LineType.MATCH
+
+                    context_lines.append(TextLine(line_number=context_line_num, line_content=lines[j], match_type=match_type))
+
+                matches.append(TextSearchMatch(context_lines=context_lines, source_file_path=source_file_path))
+
+    return matches
