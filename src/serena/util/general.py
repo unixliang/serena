@@ -20,7 +20,7 @@ def load_yaml(path: str, preserve_comments: Literal[False]) -> dict: ...
 @overload
 def load_yaml(path: str, preserve_comments: Literal[True]) -> CommentedMap: ...
 def load_yaml(path: str, preserve_comments: bool = False) -> dict | CommentedMap:
-    with open(path, encoding="utf-8") as f:
+    with open(path, encoding="utf-8", errors="ignore") as f:
         yaml = _create_YAML(preserve_comments)
         return yaml.load(f)
 
@@ -28,5 +28,5 @@ def load_yaml(path: str, preserve_comments: bool = False) -> dict | CommentedMap
 def save_yaml(path: str, data: dict | CommentedMap, preserve_comments: bool = False) -> None:
     yaml = _create_YAML(preserve_comments)
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
+    with open(path, "w", encoding="utf-8", errors="ignore") as f:
         yaml.dump(data, f)

@@ -58,7 +58,7 @@ class CodeEditor(Generic[TSymbol], ABC):
             yield edited_file
             # save the file
             abs_path = os.path.join(self.project_root, relative_path)
-            with open(abs_path, "w", encoding="utf-8") as f:
+            with open(abs_path, "w", encoding="utf-8", errors="ignore") as f:
                 f.write(edited_file.get_contents())
             # notify agent (if provided)
             if self.agent is not None:

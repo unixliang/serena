@@ -75,12 +75,12 @@ class MemoriesManager:
         memory_file_path = self._get_memory_file_path(name)
         if not memory_file_path.exists():
             return f"Memory file {name} not found, consider creating it with the `write_memory` tool if you need it."
-        with open(memory_file_path, encoding="utf-8") as f:
+        with open(memory_file_path, encoding="utf-8", errors="ignore") as f:
             return f.read()
 
     def save_memory(self, name: str, content: str) -> str:
         memory_file_path = self._get_memory_file_path(name)
-        with open(memory_file_path, "w", encoding="utf-8") as f:
+        with open(memory_file_path, "w", encoding="utf-8", errors="ignore") as f:
             f.write(content)
         return f"Memory {name} written."
 

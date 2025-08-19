@@ -217,7 +217,7 @@ class EditingTest:
         """Read the content of a file in the test repository."""
         assert self.repo_path is not None
         file_path = self.repo_path / rel_path
-        with open(file_path, encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8", errors="ignore") as f:
             return f.read()
 
     def run_test(self, content_after_ground_truth: str) -> None:

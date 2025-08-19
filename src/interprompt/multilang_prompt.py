@@ -313,7 +313,7 @@ class MultiLangPromptCollection:
                 log.debug(f"Skipping non-YAML file: {fn}")
                 continue
             path = os.path.join(prompts_dir, fn)
-            with open(path, encoding="utf-8") as f:
+            with open(path, encoding="utf-8", errors="ignore") as f:
                 data = yaml.safe_load(f)
             try:
                 prompts_data = data["prompts"]

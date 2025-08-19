@@ -474,11 +474,11 @@ class SerenaConfig(ToolInclusionDefinition, ToStringMixin):
         """
         log.info(f"Found legacy project configuration file {path}, migrating to in-project configuration.")
         try:
-            with open(path, encoding="utf-8") as f:
+            with open(path, encoding="utf-8", errors="ignore") as f:
                 project_config_data = yaml.safe_load(f)
             if "project_name" not in project_config_data:
                 project_name = path.stem
-                with open(path, "a", encoding="utf-8") as f:
+                with open(path, "a", encoding="utf-8", errors="ignore") as f:
                     f.write(f"\nproject_name: {project_name}")
             project_root = project_config_data["project_root"]
             shutil.move(str(path), str(Path(project_root) / ProjectConfig.rel_path_to_project_yml()))

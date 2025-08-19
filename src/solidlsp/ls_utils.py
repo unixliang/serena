@@ -172,7 +172,7 @@ class FileUtils:
             logger.log(f"File read '{file_path}' failed: File does not exist.", logging.ERROR)
             raise SolidLSPException(f"File read '{file_path}' failed: File does not exist.")
         try:
-            with open(file_path, encoding="utf-8") as inp_file:
+            with open(file_path, encoding="utf-8", errors="ignore") as inp_file:
                 return inp_file.read()
         except Exception as exc:
             logger.log(f"File read '{file_path}' failed to read with encoding 'utf-8': {exc}", logging.ERROR)

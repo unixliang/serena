@@ -237,7 +237,7 @@ def search_text(
 
 def default_file_reader(file_path: str) -> str:
     """Reads using utf-8 encoding."""
-    with open(file_path, encoding="utf-8") as f:
+    with open(file_path, encoding="utf-8", errors="ignore") as f:
         return f.read()
 
 
