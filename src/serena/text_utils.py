@@ -162,7 +162,7 @@ def search_text(
 
     """
     if source_file_path and content is None:
-        with open(source_file_path) as f:
+        with open(source_file_path, encoding="utf-8", errors="ignore") as f:
             content = f.read()
 
     if content is None:

@@ -75,7 +75,7 @@ class Project:
         abs_path = Path(self.project_root) / relative_path
         if not abs_path.exists():
             raise FileNotFoundError(f"File not found: {abs_path}")
-        return abs_path.read_text(encoding=self.project_config.encoding)
+        return abs_path.read_text(encoding=self.project_config.encoding, errors="ignore")
 
     def get_ignore_spec(self) -> pathspec.PathSpec:
         """
